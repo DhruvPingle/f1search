@@ -4,22 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 class F1SearchAdapter extends RecyclerView.Adapter<F1SearchAdapter.F1SearchAdapterViewHolder> {
 
@@ -63,39 +54,17 @@ class F1SearchAdapter extends RecyclerView.Adapter<F1SearchAdapter.F1SearchAdapt
     }
 
     public class F1SearchAdapterViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_title, tv_summary;
+        TextView tv_series, tv_season, tv_round;
 
 
         public F1SearchAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_summary = itemView.findViewById(R.id.tv_summary);
-
-
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-
-        ImageView img;
-
-        public DownloadImageTask(ImageView img) {
-            this.img = img;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            InputStream in = null;
-            try {
-                in = new URL(strings[0]).openStream();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Bitmap pictureImage = BitmapFactory.decodeStream(in);
-            System.out.println(pictureImage);
-
-            return pictureImage;
+            tv_series = itemView.findViewById(R.id.tv_series);
+            tv_season = itemView.findViewById(R.id.tv_season);
+            tv_round = itemView.findViewById(R.id.tv_round);
         }
     }
+
+
+
 }

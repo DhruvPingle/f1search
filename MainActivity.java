@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button b_search;
     private EditText et_series;
     private EditText et_round;
+    private  EditText et_season;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         b_search = findViewById(R.id.b_search);
         et_series = findViewById(R.id.et_series);
+        et_season = findViewById(R.id.et_season);
         et_round = findViewById(R.id.et_round);
         b_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println(et_series.getText() + "");
                 System.out.println(et_round.getText() + "");
+                System.out.println(et_season.getText() + "");
                 URL f1searchQuery = NetworkUtils.buildURL(et_series.getText() + "");
                 System.out.println(f1searchQuery.toString());
                 new f1SearchQueryTask().execute(f1searchQuery);
