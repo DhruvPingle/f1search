@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         rv_f1Search = findViewById(R.id.rv_f1Search);
 
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rv_f1Search.setLayoutManager(layoutManager);
 
@@ -37,9 +41,13 @@ public class MainActivity extends AppCompatActivity {
         b_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(et_series.getText() + "");
                 System.out.println(et_round.getText() + "");
                 System.out.println(et_season.getText() + "");
+                String series = et_series.getText() + "";
+                String round = et_round.getText() + "";
+                String season = et_season.getText() + "";
+                String url = "http://ergast.com/api/" + series + "/" + season + "/" + round + ".json";
+                System.out.println(url);
                 URL f1searchQuery = NetworkUtils.buildURL(et_series.getText() + "");
                 System.out.println(f1searchQuery.toString());
                 new f1SearchQueryTask().execute(f1searchQuery);
@@ -63,6 +71,29 @@ public class MainActivity extends AppCompatActivity {
             return response;
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
 
+            rv_f1Search.setHasFixedSize(true);
+            F1SearchAdapter f1SearchAdapter = new F1SearchAdapter(s);
+            rv_f1Search.setAdapter(f1SearchAdapter);
+
+            try {
+                 JSONObject jsonObject = new JSONObject(s);
+                JSONObject MRData = jsonObject.getJSONObject("MRData");
+                String series = MRData.getString("series");
+                JSONObject RaceTable = jsonObject.getJSONObject("RaceTable");
+                String season = RaceTable.getString("season");
+                String round = RaceTable.getString("round");
+                System.out.println(series);
+                System.out.println(season);
+                System.out.println(round);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }
