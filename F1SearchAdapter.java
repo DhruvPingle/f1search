@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 class F1SearchAdapter extends RecyclerView.Adapter<F1SearchAdapter.F1SearchAdapterViewHolder> {
 
@@ -20,8 +21,7 @@ class F1SearchAdapter extends RecyclerView.Adapter<F1SearchAdapter.F1SearchAdapt
     // private ImageView imageView;
     private Context context;
 
-    public F1SearchAdapter(String jsonString){ this.jsonString = jsonString;
-    }
+    public F1SearchAdapter(String jsonString){ this.jsonString = jsonString; }
 
     @NonNull
     @Override
@@ -40,20 +40,45 @@ class F1SearchAdapter extends RecyclerView.Adapter<F1SearchAdapter.F1SearchAdapt
     @Override
     public void onBindViewHolder(@NonNull F1SearchAdapterViewHolder holder, int position) {
 
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject MRData = jsonObject.getJSONObject("MRData");
+            System.out.println(jsonObject.toString());
+            String series = MRData.getString("series");
+            System.out.println(series.toString());
+            JSONObject RaceTable = MRData.getJSONObject("RaceTable");
+            JSONArray Races = RaceTable.getJSONArray("Races");
+            String season = RaceTable.getString("season");
+            System.out.println(season.toString());
+            String round = RaceTable.getString("round");
+            System.out.println(series);
+            System.out.println(season);
+            System.out.println(round);
+
+            holder.tv_series.setText(series);
+            holder.tv_season.setText(season);
+            holder.tv_round.setText(round);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
 
     @Override
     public int getItemCount() {
-        JSONArray jsonArray = null;
+        JSONObject jsonObject = null;
         try {
-            jsonArray = new JSONArray(this.jsonString);
+            jsonObject = new JSONObject(this.jsonString);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonArray.length());
-        return jsonArray.length();
+        return 1;
     }
 
     public class F1SearchAdapterViewHolder extends RecyclerView.ViewHolder {

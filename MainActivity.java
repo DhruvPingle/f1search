@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,10 +48,32 @@ public class MainActivity extends AppCompatActivity {
                 String series = et_series.getText() + "";
                 String round = et_round.getText() + "";
                 String season = et_season.getText() + "";
-                String url = "http://ergast.com/api/" + series + "/" + season + "/" + round + ".json";
+
+                String url = "http://ergast.com/api";
+
+                if (!series.equals("")){
+                    url += "/" + series;
+                }
+
+                if (!season.equals("")){
+                    url += "/" + season;
+                }
+
+                if (!round.equals("")){
+                    url += "/" + round;
+                }
+
+                url += ".json";
+
                 System.out.println(url);
-                URL f1searchQuery = NetworkUtils.buildURL(et_series.getText() + "");
-                System.out.println(f1searchQuery.toString());
+                //URL f1searchQuery = NetworkUtils.buildURL(et_series.getText() + "");
+                //System.out.println(f1searchQuery.toString());
+                URL f1searchQuery = null;
+                try {
+                    f1searchQuery = new URL(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 new f1SearchQueryTask().execute(f1searchQuery);
 
 
@@ -74,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            System.out.println("Hello: "+s);
             rv_f1Search.setHasFixedSize(true);
             F1SearchAdapter f1SearchAdapter = new F1SearchAdapter(s);
             rv_f1Search.setAdapter(f1SearchAdapter);
@@ -84,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject MRData = jsonObject.getJSONObject("MRData");
                 String series = MRData.getString("series");
                 JSONObject RaceTable = jsonObject.getJSONObject("RaceTable");
-                String season = RaceTable.getString("season");
+                JSONArray Races = jsonObject.getJSONArray("Races");
+                String season = Races.getString(Integer.parseInt("season"));
                 String round = RaceTable.getString("round");
                 System.out.println(series);
                 System.out.println(season);
